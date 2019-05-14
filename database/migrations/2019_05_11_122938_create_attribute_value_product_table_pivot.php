@@ -15,10 +15,10 @@ class CreateAttributeValueProductTablePivot extends Migration
     {
         Schema::create('attributeValue_product', function (Blueprint $table) {
             $table->unsignedBigInteger('attributeValue_id');
-            $table->foreign('attributeValue_id')->references('id')->on('attributesvalue');
+            $table->foreign('attributeValue_id')->references('id')->on('attributesvalue')->onDelete('cascade');
 
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
             $table->timestamps();
         });
