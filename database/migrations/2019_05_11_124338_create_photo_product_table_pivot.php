@@ -15,10 +15,10 @@ class CreatePhotoProductTablePivot extends Migration
     {
         Schema::create('photo_product', function (Blueprint $table) {
             $table->unsignedBigInteger('photo_id');
-            $table->foreign('photo_id')->references('id')->on('photos');
+            $table->foreign('photo_id')->references('id')->on('photos')->onDelete('cascade');
 
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
             $table->timestamps();
         });
