@@ -1789,6 +1789,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1796,10 +1798,11 @@ __webpack_require__.r(__webpack_exports__);
       categories_selected: [],
       flag: false,
       attributes: [],
-      selectedAttribute: []
+      selectedAttribute: [],
+      computedAttribute: []
     };
   },
-  props: ['brands'],
+  props: ['brands', 'product'],
   mounted: function mounted() {
     var _this = this;
 
@@ -1808,6 +1811,23 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (err) {
       console.log(err);
     });
+
+    if (this.product) {
+      for (var i = 0; i < this.product.categories.length; i++) {
+        this.categories_selected.push(this.product.categories[i].id);
+      }
+
+      for (var i = 0; i < this.product.attribute_values.length; i++) {
+        this.selectedAttribute.push({
+          'index': i,
+          'value': this.product.attribute_values[i].id
+        });
+        this.computedAttribute.push(this.product.attribute_values[i].id);
+      }
+
+      var load = 'ok';
+      this.onChange(null, load);
+    }
   },
   methods: {
     getAllChildren: function getAllChildren(currentValue, level) {
@@ -1823,11 +1843,16 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    onChange: function onChange(event) {
+    onChange: function onChange(event, load) {
       var _this2 = this;
 
       this.flag = false;
       axios.post('/api/categories/attribute', this.categories_selected).then(function (res) {
+        if (_this2.product && load == null) {
+          _this2.computedAttribute = [];
+          _this2.selectedAttribute = [];
+        }
+
         _this2.attributes = res.data.attributes;
         _this2.flag = true;
       })["catch"](function (err) {
@@ -1835,9 +1860,23 @@ __webpack_require__.r(__webpack_exports__);
         _this2.flag = false;
       });
     },
-    addAttribute: function addAttribute(event) {
-      if (this.selectedAttribute.indexOf(event.target.value) == -1) {
-        this.selectedAttribute.push(event.target.value);
+    addAttribute: function addAttribute(event, index) {
+      for (var i = 0; i < this.selectedAttribute.length; i++) {
+        var current = this.selectedAttribute[i];
+
+        if (current.index === index) {
+          this.selectedAttribute.splice(i, 1);
+        }
+      }
+
+      this.selectedAttribute.push({
+        'index': index,
+        'value': event.target.value
+      });
+      this.computedAttribute = [];
+
+      for (var i = 0; i < this.selectedAttribute.length; i++) {
+        this.computedAttribute.push(this.selectedAttribute[i].value);
       }
     }
   }
@@ -37177,7 +37216,7 @@ var render = function() {
                   : $$selectedVal[0]
               },
               function($event) {
-                return _vm.onChange($event)
+                return _vm.onChange($event, null)
               }
             ]
           }
@@ -37194,7 +37233,7 @@ var render = function() {
     _vm.flag
       ? _c(
           "div",
-          _vm._l(_vm.attributes, function(attribute) {
+          _vm._l(_vm.attributes, function(attribute, index) {
             return _c("div", { staticClass: "form-group" }, [
               _c("label", [_vm._v("ویژگی " + _vm._s(attribute.title))]),
               _vm._v(" "),
@@ -37205,21 +37244,43 @@ var render = function() {
                   staticStyle: { "border-color": "blue" },
                   on: {
                     change: function($event) {
-                      return _vm.addAttribute($event)
+                      return _vm.addAttribute($event, index)
                     }
                   }
                 },
-                _vm._l(attribute.attributes_value, function(attributeValue) {
-                  return _c(
-                    "option",
-                    {
-                      staticClass: "text-bold text-green",
-                      domProps: { value: attributeValue.id }
-                    },
-                    [_vm._v(_vm._s(attributeValue.title))]
-                  )
-                }),
-                0
+                [
+                  _vm._l(attribute.attributes_value, function(attributeValue) {
+                    return !_vm.product
+                      ? _c(
+                          "option",
+                          {
+                            staticClass: "text-bold text-green",
+                            domProps: { value: attributeValue.id }
+                          },
+                          [_vm._v(_vm._s(attributeValue.title))]
+                        )
+                      : _vm._e()
+                  }),
+                  _vm._v(" "),
+                  _vm._l(attribute.attributes_value, function(attributeValue) {
+                    return _vm.product
+                      ? _c(
+                          "option",
+                          {
+                            staticClass: "text-bold text-green",
+                            domProps: {
+                              value: attributeValue.id,
+                              selected:
+                                _vm.product.attribute_values[index].id ===
+                                attributeValue.id
+                            }
+                          },
+                          [_vm._v(_vm._s(attributeValue.title))]
+                        )
+                      : _vm._e()
+                  })
+                ],
+                2
               )
             ])
           }),
@@ -37229,7 +37290,7 @@ var render = function() {
     _vm._v(" "),
     _c("input", {
       attrs: { type: "hidden", name: "attributes[]" },
-      domProps: { value: _vm.selectedAttribute }
+      domProps: { value: _vm.computedAttribute }
     }),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
@@ -37238,17 +37299,37 @@ var render = function() {
       _c(
         "select",
         { staticClass: "form-control", attrs: { name: "brand" } },
-        _vm._l(_vm.brands, function(brand) {
-          return _c(
-            "option",
-            {
-              staticClass: "text-bold text-green",
-              domProps: { value: brand.id }
-            },
-            [_vm._v(_vm._s(brand.title))]
-          )
-        }),
-        0
+        [
+          _vm._l(_vm.brands, function(brand) {
+            return !_vm.product
+              ? _c(
+                  "option",
+                  {
+                    staticClass: "text-bold text-green",
+                    domProps: { value: brand.id }
+                  },
+                  [_vm._v(_vm._s(brand.title))]
+                )
+              : _vm._e()
+          }),
+          _vm._v(" "),
+          _vm._l(_vm.brands, function(brand) {
+            return _vm.product
+              ? _c(
+                  "option",
+                  {
+                    staticClass: "text-bold text-green",
+                    domProps: {
+                      value: brand.id,
+                      selected: _vm.product.brand.id === brand.id
+                    }
+                  },
+                  [_vm._v(_vm._s(brand.title))]
+                )
+              : _vm._e()
+          })
+        ],
+        2
       )
     ])
   ])
