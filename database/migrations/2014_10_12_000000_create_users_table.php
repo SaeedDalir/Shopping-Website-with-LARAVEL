@@ -19,10 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('national_code');
             $table->string('phone');
-            $table->string('birthday');
-            $table->tinyInteger('gender');
-            $table->string('bank_number');
-            $table->unsignedInteger('province_code');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

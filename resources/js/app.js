@@ -22,6 +22,7 @@ window.Vue = require('vue');
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('attribute-component', require('./components/AttributeComponent').default);
+Vue.component('select-city-component', require('./components/SelectCityComponent').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

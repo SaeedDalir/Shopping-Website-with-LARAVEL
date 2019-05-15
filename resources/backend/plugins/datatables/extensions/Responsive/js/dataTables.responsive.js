@@ -793,7 +793,7 @@ Api.register( 'responsive()', function () {
 	return this;
 } );
 
-Api.register( 'responsive.index()', function ( li ) {
+Api.register( 'responsive.index()', function (li ) {
 	li = $(li);
 
 	return {

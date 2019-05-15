@@ -11,13 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::prefix('api')->group(function (){
     Route::get('/categories','Backend\CategoryController@apiIndex');
     Route::post('/categories/attribute','Backend\CategoryController@apiIndexAttribute');
+    Route::get('/cities/{provinceId}','Auth\RegisterController@getAllCities');
 });
 
 Route::prefix('admin')->group(function (){
@@ -33,3 +30,13 @@ Route::prefix('admin')->group(function (){
     Route::resource('products','Backend\ProductController');
 
 });
+
+Route::resource('/','Frontend\HomeController');
+Route::post('/','Frontend\UserController@register')->name('user.register');
+
+Route::group(['middleware'=>'auth'], function (){
+    Route::get('/profile','Frontend\UserController@profile')->name('user.profile');
+});
+
+Auth::routes();
+
