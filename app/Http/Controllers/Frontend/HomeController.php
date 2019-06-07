@@ -6,6 +6,7 @@ use App\Brand;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 
 class HomeController extends Controller
 {
@@ -85,5 +86,16 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * @param $locale
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function lang($locale)
+    {
+        App::setLocale($locale);
+        session()->put('locale', $locale);
+        return redirect()->back();
     }
 }

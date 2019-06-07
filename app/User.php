@@ -51,4 +51,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->level == 'admin' ;
+    }
+
+    public function isSeller()
+    {
+        return $this->level == 'seller' ;
+    }
+
+    public function isUser()
+    {
+        return $this->level == 'user' ;
+    }
 }

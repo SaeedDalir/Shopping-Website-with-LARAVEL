@@ -345,16 +345,20 @@
                         <li><a href="index2.html"><i class="fa fa-circle-o"></i>  داشبورد v2</a></li>
                     </ul>
                 </li>
+                @canany(['is_user','is_seller'])
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-database"></i>
                         <span>محصولات</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{route('products.index')}}"><i class="fa fa-list"></i>لیست محصولات </a></li>
-                    </ul>
+
+                        <ul class="treeview-menu">
+                            <li><a href="{{route('products.index')}}"><i class="fa fa-list"></i>لیست محصولات </a></li>
+                        </ul>
                 </li>
+                @endcanany
+
 
                 <li class="treeview">
                     <a href="#">
@@ -390,6 +394,7 @@
                         <li><a href="{{route('brands.index')}}"><i class="fa fa-list"></i>لیست برند ها </a></li>
                     </ul>
                 </li>
+                <li><a href="{{route('orders.index')}}"><i class="fa fa-list"></i>سفارشات </a></li>
             </ul>
         </section>
         <!-- /.sidebar -->

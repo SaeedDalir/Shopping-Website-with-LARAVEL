@@ -12,7 +12,8 @@
         <div class="row">
             <!--Middle Part Start-->
             <div class="col-sm-9" id="content">
-                <h1 class="title">ثبت نام حساب کاربری</h1>
+                <h1 class="title">@lang('sentence.User Registration')</h1>
+                @include('partials.form-errors')
                 <p>اگر قبلا حساب کاربریتان را ایجاد کرد اید جهت ورود به <a href="{{route('login')}}">صفحه لاگین</a> مراجعه کنید.</p>
                 <form method="POST" action="{{ route('user.register') }}" class="form-horizontal">
                     @csrf

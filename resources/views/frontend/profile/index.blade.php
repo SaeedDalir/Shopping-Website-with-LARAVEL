@@ -26,10 +26,21 @@
         <!--Right Part End -->
         <!--Middle Part Start-->
         <div id="content" class="col-sm-9">
-            <div class="alert alert-success">
+            @if(Session::has('success'))
+                <div class="alert alert-success">
+                    <div>{{session('success')}}</div>
+                </div>
+            @endif
+            @if(Session::has('unsuccess'))
+                <div class="alert alert-danger">
+                    <div>{{session('unsuccess')}}</div>
+                </div>
+            @endif
+            <div class="alert alert-info">
                 <p>{{Auth::user()->name . ' ' . Auth::user()->last_name}} به حساب کاربری خود خوش آمدید</p>
             </div>
         </div>
+
         <!--Middle Part End -->
     </div>
 @endsection
